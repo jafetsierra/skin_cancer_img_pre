@@ -4,10 +4,10 @@ from PIL import Image
 import requests
 
 
-SERVER_URL = 'https://skin-cancer-diagnosis-api.herokuapp.com/v1/models/skin_cancer_model:predict'
+SERVER_URL = 'https://skin-cancer--pred-api.herokuapp.com//v1/models/skin_cancer_model:predict'
 
 def make_prediction(file):
-    img        = np.array(Image.open(file).resize((224,224)),dtype=np.float32)
+    img        = np.array(Image.open(file),dtype=np.float32)
     tensor     = img = np.expand_dims(img,0)
     input_data_json = json.dumps({
     "signature_name": "serving_default",
