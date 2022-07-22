@@ -1,3 +1,4 @@
+from cProfile import label
 from fastapi import FastAPI, File, UploadFile
 import json
 import numpy as np
@@ -5,6 +6,12 @@ from PIL import Image
 import requests
 
 app = FastAPI()
+
+def process_pred(y):
+    labels = ['bkl', 'nv', 'df', 'mel', 'vasc', 'bcc', 'akiec']
+    index = np.argmax(y)
+    value = max(y)
+    return (labels[index],value)
 
 def make_prediction(file):
     SERVER_URL = 'https://skin-cancer--pred-api.herokuapp.com/v1/models/skin_cancer_model:predict'
@@ -19,8 +26,9 @@ def make_prediction(file):
     response.raise_for_status() # raise an exception in case of error
     response = response.json()
     y_proba = np.array(response["predictions"])
+
     return {
-        "prediction": y_proba[0].tolist()
+        "prediction": process_pred(y_proba[0])
     }
 
 
